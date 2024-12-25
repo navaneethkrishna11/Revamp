@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link instead of <a>
 import { Menu, X } from 'lucide-react';
 
 const Navbar1 = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrolled, setScrolled] = useState(false);
+
+  // Navigation Items with Explicit Routing
+  const navItems = [
+    { name: 'Home', path: '/' },
+    { name: 'Collections', path: '/collections' },
+    { name: 'About', path: '/about' },
+    { name: 'Contact', path: '/contact' }
+  ];
 
   // Handle scroll effect
   useEffect(() => {
@@ -52,25 +61,24 @@ const Navbar1 = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <div className="flex-shrink-0">
-              <p className="p-3 text-4xl font-semibold">
+              <Link to="/" className="p-3 text-4xl font-semibold">
                 <span className="text-orange-600">Rev</span>
                 <span className="text-black">amp</span>
-              </p>
+              </Link>
             </div>
 
-          {/* Desktop Menu */}
-<div className="hidden md:flex space-x-8">
-  {['Home', 'Collections', 'About', 'Contact'].map((item) => (
-    <a
-      key={item}
-      href={item === 'Home' ? '/' : `/${item.toLowerCase()}`} // Check if it's Home, then set href as '/'
-      className="text-gray-800 hover:text-orange-600 px-3 py-2 rounded-md text-sm uppercase font-medium tracking-wider transition-colors duration-200"
-    >
-      {item}
-    </a>
-  ))}
-</div>
-
+            {/* Desktop Menu */}
+            <div className="hidden md:flex space-x-8">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="text-gray-800 hover:text-orange-600 px-3 py-2 rounded-md text-sm uppercase font-medium tracking-wider transition-colors duration-200"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
@@ -87,14 +95,15 @@ const Navbar1 = () => {
         {/* Mobile Menu */}
         <div className={`md:hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white/90 backdrop-blur-md">
-            {['Home', 'Collections', 'About', 'Contact'].map((item) => (
-              <a
-                key={item}
-                href={`/${item.toLowerCase()}`}
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-800 hover:text-orange-600 hover:bg-gray-50 transition-colors duration-200"
+                onClick={() => setIsOpen(false)} // Close mobile menu on link click
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             ))}
           </div>
         </div>
